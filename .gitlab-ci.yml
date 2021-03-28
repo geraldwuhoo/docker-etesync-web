@@ -13,7 +13,9 @@ build:
   stage: build
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - export ETESYNC_COMMIT_SHORT_SHA="$(wget -qO- https://api.github.com/repos/etesync/etesync-web/commits/master 2> /dev/null | awk -F"\"" '/sha/ { print substr($4,0,8); exit }')"
+    - echo "$ETESYNC_COMMIT_SHORT_SHA"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker build -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$ETESYNC_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY_IMAGE:latest
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:$ETESYNC_COMMIT_SHORT_SHA
