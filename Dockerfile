@@ -7,7 +7,7 @@
 # Build Stage =====================================================================================
 
 # Use node image for build step (this has yarn which we need)
-FROM node:alpine as build
+FROM docker.io/node:alpine as build
 
 # Version
 LABEL version="c0d884a"
@@ -26,7 +26,7 @@ RUN apk add --no-cache git && \
 # Run Stage =======================================================================================
 
 # This lightweight image contains nginx which will run the web client
-FROM nginx:alpine
+FROM docker.io/nginx:alpine
 
 # Grabs the built web client files from the previous build stage
 COPY --from=build /etesync-web/build /usr/share/nginx/html
