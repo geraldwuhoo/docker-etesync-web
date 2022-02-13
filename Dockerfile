@@ -7,10 +7,10 @@
 # Build Stage =====================================================================================
 
 # Use node image for build step (this has yarn which we need)
-FROM docker.io/node:alpine as build
+FROM docker.io/library/node:alpine as build
 
 # Version
-LABEL version="c0d884a"
+LABEL version="8f22c54"
 
 # This variable allows you to set the default etesync server for the web client.
 # Change this to your own server if self hosting.
@@ -26,7 +26,7 @@ RUN apk add --no-cache git && \
 # Run Stage =======================================================================================
 
 # This lightweight image contains nginx which will run the web client
-FROM docker.io/nginx:alpine
+FROM docker.io/library/nginx:alpine
 
 # Grabs the built web client files from the previous build stage
 COPY --from=build /etesync-web/build /usr/share/nginx/html
